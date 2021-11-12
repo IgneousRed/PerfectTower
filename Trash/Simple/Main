@@ -1,3 +1,5 @@
+:name Gio.Trash.Simple.Main
+
 :global int gio.tiers
 :global string gio.items
 
