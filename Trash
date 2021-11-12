@@ -16,6 +16,8 @@ key.t()
 isopen("factory")
 
 executesync("turbo start")
+
+; How many tiers to trash, simple!
 data = "\
 0 block.dense \
 0 plate.dense \
