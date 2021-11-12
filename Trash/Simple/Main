@@ -1,4 +1,4 @@
-:name Gio.Trash.Simple.Main
+:name Gio.Trash.Simple
 
 :global int gio.tiers
 :global string gio.items
