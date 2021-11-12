@@ -1,4 +1,4 @@
-# AI Scripts and Utilities for Perfect Tower II
+# AI Scripts for Perfect Tower II
 
 #### Quick-Navigation
 - [Trash](#trash)
