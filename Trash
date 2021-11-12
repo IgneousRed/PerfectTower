@@ -1,4 +1,4 @@
-:name Gio.Trash
+:name Ir.Trash
 
 :local string data
 :local int start
