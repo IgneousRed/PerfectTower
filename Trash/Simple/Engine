@@ -1,0 +1,21 @@
+:name Gio.Trash.Simple.Engine
+
+:global string gio.items
+:global int gio.tiers
+:local int start
+:local int end
+:local int t
+#next_space index(gio.items, " ", start)
+#selected sub(gio.items, start, end - start)
+
+item_inc:
+end = if({next_space} == -1, len(gio.items), {next_space})
+tier_inc:
+t += 1
+trash({selected}, t, count({selected}, t))
+gotoif(tier_inc, t < gio.tiers)
+lu("t")
+start = end + 1
+gotoif(item_inc, start < len(gio.items))
+gu("gio.tiers")
+gu("gio.items")
