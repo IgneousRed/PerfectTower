@@ -1,0 +1,98 @@
+:name Ir.Trash.Specific
+
+:local int start
+:local int end
+:local int tiers
+:local int t
+
+; Only modify this macro!
+; By changing the number, you control how many tiers to trash
+; Do Not Remove any pair, instead just set it to 0
+; This is the same default configuration as in the Simple variant
+;   it ignores 130 items, leaving you with in worst case
+;   2 slots if you have bonus factory inventory
+#data "\
+5 block.dense \
+5 plate.dense \
+9 screw \
+0 plate.rubber \
+9 plate.circuit \
+9 ring \
+9 pipe \
+9 wire \
+9 circuit \
+2 hammer \
+5 motor \
+0 chip \
+5 cable.insulated \
+5 block \
+5 pump \
+5 plate.stack \
+0 lump \
+3 producer.town \
+3 producer.mine \
+3 producer.powerplant \
+3 producer.factory \
+3 producer.workshop \
+3 producer.constructionFirm \
+3 producer.headquarters \
+3 producer.laboratory \
+3 producer.tradingpost \
+3 producer.arcade \
+3 producer.museum \
+3 producer.shipyard \
+3 producer.statueofcubos \
+0 producer.gems \
+0 producer.exoticgems \
+9 machine.oven \
+9 machine.presser \
+9 machine.transportbelt \
+9 machine.crusher \
+9 machine.mixer \
+9 machine.refinery \
+9 machine.assembler \
+9 machine.shaper \
+9 machine.cutter \
+9 machine.boiler \
+0 sapling.rubber \
+0 rubber \
+0 ore \
+0 dust \
+0 ingot \
+9 rod \
+9 plate \
+9 cable \
+"
+#space_index index({data}, " ", start)
+#next_end if({space_index} == -1, len({data}), {space_index})
+#selected(end) sub({data}, start, {end} - start)
+#tier {selected({next_end})}
+
+; Impulses
+key.t()
+
+; Conditions
+isopen("factory")
+
+; Actions
+executesync("turbo start")
+
+item_inc:
+tiers = if({tier} == "10", 10, index("0123456789", {tier}, 0))
+start = {next_end} + 1
+end = {next_end}
+goto(tier_check)
+
+tier_inc:
+t += 1
+trash({selected(end)}, t, count({selected(end)}, t))
+
+tier_check:
+gotoif(tier_inc, t < tiers)
+
+lu("t")
+start = end + 1
+gotoif(item_inc, start < len({data}))
+
+executesync("turbo stop")
+wait(0.0)
