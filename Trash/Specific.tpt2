@@ -78,7 +78,7 @@ isopen("factory")
 executesync("turbo start")
 
 item_inc:
-tiers = if({tier} == "10", 10, index("0123456789", {tier}, 0))
+tiers = index("012345678910", {tier}, 0)
 start = {next_end} + 1
 end = {next_end}
 goto(tier_check)
