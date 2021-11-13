@@ -8,7 +8,7 @@
 ; Only modify this macro!
 ; By changing the number, you control how many tiers to trash
 ; Do Not Remove any pair, instead just set it to 0
-; This is the same default configuration as in the Simple variant
+; This is the same default configuration as in the Simple version
 ;   it ignores 130 items, leaving you with in worst case
 ;   2 slots if you have bonus factory inventory
 #data "\
