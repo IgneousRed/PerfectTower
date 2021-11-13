@@ -1,0 +1,34 @@
+:name Ir.Trash.Simple.Engine
+
+:global string ir.items
+:global int ir.tiers
+:local int start
+:local int end
+:local int t
+
+#space_index index(ir.items, " ", start)
+#selected sub(ir.items, start, end - start)
+
+; It would be better if both the turbo and the global uninit
+;   are instead in the main script, but this way there is more
+;   space for defining what to delete 
+
+; Actions
+executesync("turbo start")
+
+item_inc:
+end = if({space_index} == -1, len(ir.items), {space_index})
+
+tier_inc:
+t += 1
+trash({selected}, t, count({selected}, t))
+gotoif(tier_inc, t < ir.tiers)
+
+lu("t")
+start = end + 1
+gotoif(item_inc, start < len(ir.items))
+
+gu("ir.items")
+gu("ir.tiers")
+executesync("turbo stop")
+wait(0.0)
