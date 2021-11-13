@@ -1,0 +1,37 @@
+:name Ir.Trash.Simple
+
+:global string ir.items
+:global int ir.tiers
+
+; Each Engine call deletes ir.tiers of all ir.items
+; This is the same default configuration as in the Specific variant
+;   it ignores 130 items, leaving you with in worst case
+;   2 slots if you have bonus factory inventory
+
+; Impulses
+key.t()
+
+; Conditions
+isopen("factory")
+
+; Actions
+
+; All 10 machines
+ir.items = "machine.oven machine.presser machine.transportbelt machine.crusher machine.mixer machine.refinery machine.assembler machine.shaper machine.cutter machine.boiler"
+ir.tiers = 9; As T10 are used in exotic gem producers
+executesync("Gio.Trash.Engine")
+
+; Cheap parts made from <= 1 dust
+ir.items = "screw plate.circuit ring pipe wire circuit rod plate cable"
+ir.tiers = 9
+executesync("Gio.Trash.Engine")
+
+; Expensive parts made from > 1 dust
+ir.items = "block.dense plate.dense hammer motor cable.insulated block pump plate.stack"
+ir.tiers = 5
+executesync("Gio.Trash.Engine")
+
+; Normal producers
+ir.items = "producer.town producer.mine producer.powerplant producer.factory producer.workshop producer.constructionFirm producer.headquarters producer.laboratory producer.tradingpost producer.arcade producer.museum producer.shipyard producer.statueofcubos"
+ir.tiers = 3
+executesync("Gio.Trash.Engine")
