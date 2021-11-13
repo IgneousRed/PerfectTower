@@ -1,4 +1,5 @@
 # AI Scripts for Perfect Tower II
+***If sctipts come in bundles, only interact with the main one. Unless you wish to tinker around.***
 ## Trash.Simple
 Pressing "T" deletes all selected factory items. Simple to edit in-game.
 
