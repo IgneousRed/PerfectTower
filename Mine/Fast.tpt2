@@ -1,4 +1,4 @@
-:name Ir.Mine.ActionGolf
+:name Ir.Mine.Fast
 
 ; done, [12]tab, [2]noLayers, [4]y, [4]x
 :local int i
