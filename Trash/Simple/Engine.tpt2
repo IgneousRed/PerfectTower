@@ -2,33 +2,28 @@
 
 :global string ir.items
 :global int ir.tiers
-:local int start
-:local int end
-:local int t
-
-#spaceIndex index(ir.items, " ", start)
-#selected sub(ir.items, start, end - start)
+:local int i
 
 ; It would be better if both the turbo and the global uninit
 ;   are instead in the main script, but this way there is more
 ;   space for defining what to delete 
 
+#tierCardinality 10
+#tier i % {tierCardinality} + 1
+#indexStart i / {tierCardinality}
+#indexSpace index(ir.items, " ", {indexStart})
+#indexEnd if({indexSpace} == -1, len(ir.items), {indexSpace})
+#item sub(ir.items, {indexStart}, {indexEnd} - {indexStart}), {tier}
+
 ; Actions
 executesync("turbo start")
 
-newItem:
-end = if({spaceIndex} == -1, len(ir.items), {spaceIndex})
-
-newTier:
-t += 1
-trash({selected}, t, count({selected}, t))
-gotoif(newTier, t < ir.tiers)
-
-lu("t")
-start = end + 1
-gotoif(newItem, start < len(ir.items))
+loop:
+trash({item}, count({item}))
+i = if({tier} < ir.tiers, i + 1, ({indexEnd} + 1) * {tierCardinality})
+gotoif(loop, {indexStart} < len(ir.items))
 
 gu("ir.items")
 gu("ir.tiers")
 executesync("turbo stop")
-wait(0.0)
+wait(0.)
