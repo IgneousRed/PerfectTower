@@ -1,0 +1,27 @@
+:name Ir.Mine.LineGolf
+
+:local int i
+
+#pos i % 100
+#tab i / 100
+
+; Impulses
+wakeup()
+open.mine()
+
+; Conditions
+isopen("mine")
+
+; Actions
+new_tab:
+tab({tab} + 1)
+
+new_layer:
+newlayer()
+
+new_dig:
+dig({pos} % 4, {pos} / 4)
+i = if({pos} == 15, i + 100 - 15, i + 1)
+goto(if(isopen("mine") == false || 11 < {tab}, 99, \
+  if(0 < i, new_dig, \
+    if(hasLayers(), new_layer, new_tab))))
