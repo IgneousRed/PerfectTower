@@ -1,0 +1,33 @@
+:name Ir.Mine.Fast
+
+:local int i
+
+#posCardinality 4 * 4
+#tab i / {posCardinality}
+
+; Impulses
+wakeup()
+open.mine()
+
+; Conditions
+isopen("mine")
+
+; Actions
+executesync("turbo start")
+
+tab:
+tab({tab} + 1)
+goto(dig)
+
+layer:
+newlayer()
+
+dig:
+dig(i % 4, (i % {posCardinality}) / 4)
+i += 1
+gotoif(if(0 < i, dig, \
+  if(hasLayers(), layer, tab)), \
+    isopen("mine") && {tab} < 12)
+
+executesync("turbo stop")
+wait(0.0)
