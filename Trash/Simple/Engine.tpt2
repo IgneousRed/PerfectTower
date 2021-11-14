@@ -6,7 +6,7 @@
 :local int end
 :local int t
 
-#space_index index(ir.items, " ", start)
+#spaceIndex index(ir.items, " ", start)
 #selected sub(ir.items, start, end - start)
 
 ; It would be better if both the turbo and the global uninit
@@ -17,7 +17,7 @@
 executesync("turbo start")
 
 item_inc:
-end = if({space_index} == -1, len(ir.items), {space_index})
+end = if({spaceIndex} == -1, len(ir.items), {spaceIndex})
 
 tier_inc:
 t += 1
