@@ -3,7 +3,7 @@
 
 ***Scripts use [Turbo Execute](https://github.com/Xenos6666/TPT2_scripts/blob/main/common/turbo_exec/README.md) unless they are playing golf.***
 
-***If sctipts come in bundles, only interact with the main one. Unless you wish to tinker around.***
+***If sctipts come in a bundle, only interact with the main one. Unless you wish to tinker around.***
 ## [Mine.Fast](Mine/Fast.tpt2)
 Mines all layers/tabs everytime you enter the mine
 
