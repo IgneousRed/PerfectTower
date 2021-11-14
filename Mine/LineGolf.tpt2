@@ -13,15 +13,15 @@ open.mine()
 isopen("mine")
 
 ; Actions
-new_tab:
+newTab:
 tab({tab} + 1)
 
-new_layer:
+newLayer:
 newlayer()
 
-new_dig:
+newDig:
 dig({pos} % 4, {pos} / 4)
 i = if({pos} == 15, i + 100 - 15, i + 1)
 goto(if(isopen("mine") == false || 11 < {tab}, 99, \
-  if(0 < i, new_dig, \
-    if(hasLayers(), new_layer, new_tab))))
+  if(0 < i, newDig, \
+    if(hasLayers(), newLayer, newTab))))
