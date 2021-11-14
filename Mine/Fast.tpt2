@@ -1,9 +1,15 @@
-:name Ir.Mine.Fast
+:name Ir.Mine.ActionGolf
 
+; done, [12]tab, [2]noLayers, [4]y, [4]x
 :local int i
 
-#posCardinality 4 * 4
-#tab i / {posCardinality}
+#xSize 4
+#yVal {xSize}
+#ySize 4
+#noLayersVal ({yVal} * {ySize})
+#tabVal ({noLayersVal} * 2)
+#tab (i / {tabVal})
+#noLayersRemainder (i % {noLayersVal})
 
 ; Impulses
 wakeup()
@@ -23,11 +29,12 @@ layer:
 newlayer()
 
 dig:
-dig(i % 4, (i % {posCardinality}) / 4)
-i += 1
-gotoif(if(0 < i, dig, \
-  if(hasLayers(), layer, tab)), \
-    isopen("mine") && {tab} < 12)
+dig(i % {xSize}, i / {yVal} % {ySize})
+i = if({noLayersRemainder} < {noLayersVal} - 1, i + 1, \
+  if(hasLayers(), {tab} * {tabVal}, ({tab} + 1) * {tabVal} + {noLayersVal}))
+gotoif(if(0 < {noLayersRemainder}, dig, \
+  if(i % {tabVal} == 0, layer, tab)), \
+    isopen("mine") && {tab} / 12 == 0)
 
 executesync("turbo stop")
-wait(0.0)
+wait(0.)
