@@ -34,4 +34,4 @@ i = if({noLayersRemainder} < {noLayersVal} - 1, i + 1, \
   if(hasLayers(), {tab} * {tabVal}, ({tab} + 1) * {tabVal} + {noLayersVal}))
 gotoif(if(0 < {noLayersRemainder}, dig, \
   if(i % {tabVal} == 0, layer, tab)), \
-    isopen("mine") && {tab} / 12 == 0)
+    isopen("mine") && {tab} < 12)
