@@ -4,9 +4,9 @@
 :global int ir.tiers
 
 ; Each Engine call deletes ir.tiers of all ir.items
-; This is the same default configuration as in the Specific version
+; Default configuration as in the Specific version
 ;   it ignores 130 items, leaving you with in worst case
-;   2 slots if you have bonus factory inventory
+;   2 slots if you have bonus 24 factory inventory
 
 ; Impulses
 key.t()
