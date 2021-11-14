@@ -2,6 +2,9 @@
 
 :local int i
 
+; Inserting "goto(dig)" before "layer:" will
+;   make it make sure no spots are missed
+
 #posCardinality 4 * 4
 #tab i / {posCardinality}
 
