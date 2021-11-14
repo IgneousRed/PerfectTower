@@ -16,17 +16,17 @@
 ; Actions
 executesync("turbo start")
 
-item_inc:
+newItem:
 end = if({spaceIndex} == -1, len(ir.items), {spaceIndex})
 
-tier_inc:
+newTier:
 t += 1
 trash({selected}, t, count({selected}, t))
-gotoif(tier_inc, t < ir.tiers)
+gotoif(newTier, t < ir.tiers)
 
 lu("t")
 start = end + 1
-gotoif(item_inc, start < len(ir.items))
+gotoif(newItem, start < len(ir.items))
 
 gu("ir.items")
 gu("ir.tiers")
