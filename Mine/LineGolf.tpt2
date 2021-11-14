@@ -2,8 +2,8 @@
 
 :local int i
 
-#pos i % 100
-#tab i / 100
+#posCardinality 4 * 4
+#tab i / {posCardinality}
 
 ; Impulses
 wakeup()
@@ -13,15 +13,15 @@ open.mine()
 isopen("mine")
 
 ; Actions
-newTab:
+tab:
 tab({tab} + 1)
 
-newLayer:
+layer:
 newlayer()
 
-newDig:
-dig({pos} % 4, {pos} / 4)
-i = if({pos} == 15, i + 100 - 15, i + 1)
-goto(if(isopen("mine") == false || 11 < {tab}, 99, \
-  if(0 < i, newDig, \
-    if(hasLayers(), newLayer, newTab))))
+dig:
+dig(i % 4, (i % {posCardinality}) / 4)
+i += 1
+gotoif(if(0 < i, dig, \
+  if(hasLayers(), layer, tab)), \
+    isopen("mine") && {tab} < 12)
