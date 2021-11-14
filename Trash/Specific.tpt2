@@ -1,5 +1,6 @@
 :name Ir.Trash.Specific
 
+; index, [10]t
 :local int i
 
 ; Only modify this macro!
@@ -60,11 +61,13 @@
 9 plate \
 9 cable\
 "
-#tier index("012345678910", sub({data}, i, 1), 0)
+#t (i % 10) + 1
+#index (i / 10)
+#tier index("012345678910", sub({data}, {index}, 1), 0)
 #indexSpace(start) index({data}, " ", {start})
-#indexItemStart {indexSpace(i)} + 1
-#indexItemEnd {indexSpace({indexItemStart})}
-#item sub({data}, {indexItemStart}, {indexItemEnd} - {indexItemStart}), {tier}
+#indexItemStart ({indexSpace({index})} + 1)
+#indexItemEnd if({indexSpace({indexItemStart})} == -1, len({data}), {indexSpace({indexItemStart})})
+#item sub({data}, {indexItemStart}, {indexItemEnd} - {indexItemStart}), {t}
 
 ; Impulses
 key.t()
@@ -80,10 +83,10 @@ trash:
 trash({item}, count({item}))
 
 inc:
-i = {indexItemEnd} + 1
+i = if({t} < {tier} - 1, i + 1, ({indexItemEnd} + 1) * 10)
 
 check:
-gotoif(if({tier} < 1, inc, trash), i < len({data}))
+gotoif(if({tier} < 1, inc, trash), {index} < len({data}))
 
 executesync("turbo stop")
 wait(0.)
