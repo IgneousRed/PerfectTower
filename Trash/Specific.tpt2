@@ -1,16 +1,13 @@
 :name Ir.Trash.Specific
 
-:local int start
-:local int end
-:local int tiers
-:local int t
+:local int i
 
 ; Only modify this macro!
 ; By changing the number, you control how many tiers to trash
 ; Do Not Remove any pair, instead just set the number to 0
-; This is the same default configuration as in the Simple version
+; Default configuration as in the Simple version
 ;   it ignores 130 items, leaving you with in worst case
-;   2 slots if you have bonus factory inventory
+;   2 slots if you have bonus 24 factory inventory
 #data "\
 5 block.dense \
 5 plate.dense \
@@ -61,12 +58,13 @@
 0 ingot \
 9 rod \
 9 plate \
-9 cable \
+9 cable\
 "
-#space_index index({data}, " ", start)
-#next_end if({space_index} == -1, len({data}), {space_index})
-#selected(end) sub({data}, start, {end} - start)
-#tier {selected({next_end})}
+#tier index("012345678910", sub({data}, i, 1), 0)
+#indexSpace(start) index({data}, " ", {start})
+#indexItemStart {indexSpace(i)} + 1
+#indexItemEnd {indexSpace({indexItemStart})}
+#item sub({data}, {indexItemStart}, {indexItemEnd} - {indexItemStart}), {tier}
 
 ; Impulses
 key.t()
@@ -76,23 +74,16 @@ isopen("factory")
 
 ; Actions
 executesync("turbo start")
+goto(check)
 
-item_inc:
-tiers = index("012345678910", {tier}, 0)
-start = {next_end} + 1
-end = {next_end}
-goto(tier_check)
+trash:
+trash({item}, count({item}))
 
-tier_inc:
-t += 1
-trash({selected(end)}, t, count({selected(end)}, t))
+inc:
+i = {indexItemEnd} + 1
 
-tier_check:
-gotoif(tier_inc, t < tiers)
-
-lu("t")
-start = end + 1
-gotoif(item_inc, start < len({data}))
+check:
+gotoif(if({tier} < 1, inc, trash), i < len({data}))
 
 executesync("turbo stop")
-wait(0.0)
+wait(0.)
