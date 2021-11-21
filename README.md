@@ -1,9 +1,11 @@
 # AI Scripts for Perfect Tower II
 ***Click the Script name for source and more information.***
 
-***Made using the [external editor](https://d0sboots.github.io/perfect-tower/)***
+***Made using the [external editor](https://d0sboots.github.io/perfect-tower/).***
 
-***Scripts use [Turbo Execute](https://github.com/Xenos6666/TPT2_scripts/blob/main/common/turbo_exec/README.md) unless they are playing golf. Setting `turbo.cycles.max` above what the script uses makes it run within a single frame***
+***Scripts use [Turbo Execute](https://github.com/Xenos6666/TPT2_scripts/blob/main/common/turbo_exec/README.md) unless they are playing golf or otherwise noted.***
+
+***Setting `turbo.cycles.max` above what the script uses makes it run within a single frame.***
 
 ***If sctipts come in a bundle, only interact with the main one. Unless you wish to tinker around.***
 
@@ -13,7 +15,7 @@
 
 ***Norm(Up to 15 Actions, Usable by everyone)***
 
-***Golf(Minimal Actions, Sacrifices speed and maybe some functionality)***
+***Golf(Minimal Actions, Sacrifices speed and maybe some minor functionality)***
 
 *Sidenote: If using a factory sctipt and rushing T8(or so) Belt then T5 Producer, it is possible to quickly upgrade all the ram and get 25 Actions*
 ## [Mine.Fast](Mine/Fast.tpt2)
