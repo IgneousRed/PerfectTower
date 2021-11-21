@@ -9,7 +9,7 @@
 
 ***Scripts can come in 3 flavours:***
 
-***Perf(Max Actions, Best speed)***
+***Perf(Max Actions, Best speed) Set Turbo Cycles above noted value for 1 frame runtime***
 
 ***Norm(Up to 15 Actions, Usable by everyone)***
 
