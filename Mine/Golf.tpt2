@@ -1,0 +1,46 @@
+; GENERAL INFO
+; Mines across all tabs. Misses the initial layer, fixable with an additional Action.
+
+; IMPORTS
+:import Ir.Lib
+; Set this to 1 to loop while in the mine
+{mineSetUpLua(1)}
+
+; NAME
+:name Ir.Mine.Golf.{ifLoops(Inf,One)}
+
+; LOCALS
+; [384]i = [12]tab * [2]noLayers * [4]y * [4]x
+:local int i
+
+; MACROS
+#xSize 4
+#yVal {xSize}
+#ySize 4
+#noLayersVal ({yVal} * {ySize})
+#noLayersRemainder (i % {noLayersVal})
+#tabVal ({noLayersVal} * 2)
+#tabGet (i / {tabVal})
+#tabValD(v) ({v} * {tabVal})
+
+; CODE
+wakeup()
+open.mine()
+
+isopen("mine")
+
+newTab:
+  tab({tabGet} + 1)
+  ; Inserting "goto(dig)" here will make it make sure no spots are missed
+
+newLayer:
+  newlayer()
+
+dig:
+  dig(i % {xSize}, i / {yVal} % {ySize})
+  i = if({noLayersRemainder} < {noLayersVal} - 1, i + 1,\
+    if(hasLayers(), {tabValD({tabGet})},\
+      {tabValD(({tabGet} + 1){ifLoops( % 12,)})} + {noLayersVal}))
+  gotoif(if(0 < {noLayersRemainder}, dig,\
+    if(i % {tabVal} == 0, newLayer, newTab)),\
+      isopen("mine"){ifLoops(, & {tabGet} < 12)})
