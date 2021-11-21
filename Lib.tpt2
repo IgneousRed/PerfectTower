@@ -1,0 +1,100 @@
+; GENERAL INFO
+; Collection of Macros and Lua Code shared across multiple Ir Scripts.
+; First I wanted to create a separate Lib for every use, but decided against it,
+; as it would be tiresome for users to copy each lib. So now evertyhing is here.
+
+; NAME
+:name Ir.Lib
+
+; ________________________________________BASIC________________________________________
+#lb {
+#rb }
+#portLua(name, args) {lua(return port('{name}', {args}))}
+#portArr(name) #{name}(index) {lb}lua(return {name}[{lb}index{rb}]){rb}
+{lua(\
+  function port(name, args)\
+    local function punct(fun, i)\
+      return (i < 2 and '' or fun(i - 1)..', ')\
+    end\
+    local function input(i)\
+      return punct(input, i)..'arg'..i\
+    end\
+    local function pass(i)\
+      return punct(pass, i)..'{lb}arg'..i..'{rb}'\
+    end\
+    local function call(str)\
+      return (args < 1 or str == '') and '' or '('..str..')'\
+    end\
+    return '#'..name..'Lua'..call(input(args))..\
+    ' {lb}lua(return '..name..call(pass(args))..'){rb}'\
+  end\
+  function c2I(c)\
+    return 'index("0123456789", '..c..', 0)'\
+  end\
+  function index2I(str, index)\
+    return c2I('sub('..str..', '..index..', 1)')\
+  end\
+  function s2I(str, c_len)\
+    local c_len = c_len - 1\
+    return (0 < c_len and '('..s2I(str, c_len)..') * 10 + ' or '')..index2I(str, c_len)\
+  end\
+)}
+{portLua(c2I, 1)}
+{portLua(index2I, 2)}
+{portLua(s2I, 2)}
+
+; TESTING
+;s = {s2ILua('"123"', 3)}
+
+; ________________________________________MINE________________________________________
+; Compile-time code switch for small bits of code that are different
+; between infinite and finite versions
+#ifLoops(true_part, false_part) {lua(\
+  return loops ~= 0 and '{true_part}' or '{false_part}'\
+)}
+#mineSetUpLua(loop) {lua(\
+  loops = loop\
+)}
+
+; ________________________________________DUST________________________________________
+{lua(\
+  local dustVal = {}\
+  function wrap(str)\
+    return '('..str..')'\
+  end\
+  function dustLower(t)\
+    return wrap('count("dust", '..t..') - 2.')\
+  end\
+  function currentValC(c_t)\
+    return c_t < 2 and dustLower(1) or wrap('('..dustLower(c_t)..\
+      ' + count("lump", '..(c_t - 1)..') * 2.) * '..dustVal[c_t])\
+  end\
+  local function currentValLowC(c_t)\
+    return currentValC(c_t)..(c_t < 2 and '' or ' + '..currentValLowC(c_t - 1))\
+  end\
+  function dustSetUp(ratioCount, ratioDigits, chemLumps, boiler)\
+    local ratioVal = {}\
+    local ratioSum = 0\
+    for i = 1, 10 do\
+      dustVal[i] = (8 - 4 * chemLumps) ^ (i - 1)\
+      ratioVal[i] = (ratioCount)[i] * dustVal[i]\
+      ratioSum = ratioSum + ratioVal[i]\
+    end\
+    local bigNum = 10 ^ ratioDigits\
+    local ratioTrunc = {}\
+    local ratioTruncSum = 0\
+    for i = 1, 10 do\
+      ratioTrunc[i] = math.floor(ratioVal[i] / ratioSum * bigNum)\
+      ratioTruncSum = ratioTruncSum + ratioTrunc[i]\
+    end\
+    local function ratioFinalF(i)\
+      return (ratioTrunc[i] + (bigNum - ratioTruncSum < i and 0 or 1)) / bigNum\
+    end\
+    ratioFinal = {}\
+    for i = 1, 10 do\
+      ratioFinal[i] = ratioFinalF(boiler ~= 0 and 11 - i or i)\
+    end\
+    currentValTotal = wrap(currentValLowC(10))\
+  end\
+)}
+{portLua(dustSetUp, 4)}
