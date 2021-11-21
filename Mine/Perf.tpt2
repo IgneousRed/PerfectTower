@@ -1,0 +1,58 @@
+; GENERAL INFO
+; Mines all layers across all tabs. Worst case takes 2419 turbo cycles
+
+; IMPORTS
+:import Ir.Lib
+; Set this to 1 to loop while in the mine
+{mineSetUpLua(1)}
+
+; NAME
+:name Ir.Mine.Perf.{ifLoops(Inf,One)}
+
+; LOCALS
+:local int tier
+
+; CODE
+wakeup()
+open.mine()
+
+isopen("mine")
+
+start:
+  executesync("turbo start")
+
+newTab:
+  tier = tier % 12 + 1
+  tab(tier)
+  goto(dig)
+
+newLayer:
+  newlayer()
+
+dig:
+  dig(0, 0)
+  dig(1, 0)
+  dig(2, 0)
+  dig(3, 0)
+  dig(0, 1)
+  dig(1, 1)
+  dig(2, 1)
+  dig(3, 1)
+  dig(0, 2)
+  dig(1, 2)
+  dig(2, 2)
+  dig(3, 2)
+  dig(0, 3)
+  dig(1, 3)
+  dig(2, 3)
+  dig(3, 3)
+  gotoif(newLayer, hasLayers())
+
+  gotoif(newTab, tier < 12)
+
+  executesync("turbo stop")
+
+waitLayer:
+  {ifLoops(goto(if(isopen("mine") == false, 99,\
+    if(hasLayers(), start, waitLayer))),\
+    wait(0.))}
