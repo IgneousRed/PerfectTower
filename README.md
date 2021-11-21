@@ -3,13 +3,13 @@
 
 ***Made using the [external editor](https://d0sboots.github.io/perfect-tower/)***
 
-***Scripts use [Turbo Execute](https://github.com/Xenos6666/TPT2_scripts/blob/main/common/turbo_exec/README.md) unless they are playing golf.***
+***Scripts use [Turbo Execute](https://github.com/Xenos6666/TPT2_scripts/blob/main/common/turbo_exec/README.md) unless they are playing golf. Setting `turbo.cycles.max` above what the script uses makes it run within a single frame***
 
 ***If sctipts come in a bundle, only interact with the main one. Unless you wish to tinker around.***
 
 ***Scripts can come in 3 flavours:***
 
-***Perf(Up to 25 Actions, Best speed) Set Turbo Cycles above noted value for 1 frame runtime***
+***Perf(Up to 25 Actions, Best speed)***
 
 ***Norm(Up to 15 Actions, Usable by everyone)***
 
