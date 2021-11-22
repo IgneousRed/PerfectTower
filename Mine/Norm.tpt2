@@ -39,4 +39,4 @@ dig:
 
   executesync("turbo stop")
 waitLayer:
-  goto(if(isopen("mine") == false, 99, if(hasLayers(), start, waitLayer)))
+  gotoif(if(hasLayers(), start, waitLayer), isopen("mine"))
