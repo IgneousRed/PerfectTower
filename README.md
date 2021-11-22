@@ -1,7 +1,7 @@
 # AI Scripts for Perfect Tower II
 ***Click the Script name for source and more information.***
 
-***Made using the [external editor](https://d0sboots.github.io/perfect-tower/).***
+***Scripts are made and meant to be edited using the [external editor](https://d0sboots.github.io/perfect-tower/), unless otherwise noted.***
 
 ***Scripts use [Turbo Execute](https://github.com/Xenos6666/TPT2_scripts/blob/main/common/turbo_exec/README.md) unless they are playing golf or otherwise noted.***
 
