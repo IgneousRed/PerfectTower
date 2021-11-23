@@ -15,7 +15,7 @@
 
 ***Norm(Up to 15 Actions, Usable by everyone)***
 
-***Golf(Minimal Actions, Sacrifices speed and maybe some minor functionality)***
+***Golf(Minimal Actions, Sacrifices speed and maybe some functionality)***
 
 *Sidenote: If using a factory sctipt and rushing T8(or so) Belt then T5 Producer, it is possible to quickly upgrade all the ram and get 25 Actions*
 # Mine
