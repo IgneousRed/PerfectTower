@@ -1,10 +1,7 @@
 General Info
-Pre Lua Macros
-Lua
-Post Lua Macros
+Imports
 Name
-Globals
-Locals
-Script Macros
-Impulses&Consitions
-Actions
+Variables
+Lua
+Macros
+Code
