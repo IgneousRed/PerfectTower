@@ -1,5 +1,5 @@
 ; GENERAL INFO
-  ; Uses the Mixer to try to keep a set dust ratio.
+  ; Uptiers dust to try to keep a set ratio.
 
 ; IMPORTS
   ; Set "ratioTarget", "ratioFinalDigits" and "hasChemicalLumps" inside.
