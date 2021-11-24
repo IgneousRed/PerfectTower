@@ -1,0 +1,25 @@
+; GENERAL INFO
+  ; Crushes all but oresToKeep ores constantly.
+
+; NAME
+  :name Ir.Crusher.Perf
+
+; VARIABLES
+  :local int tier
+
+; MACROS
+  #oresToKeep 1.
+
+; CODE
+  wakeup()
+  open.factory()
+
+  isopen("factory")
+
+loop:
+  waitwhile(active("crusher"))
+  executesync("turbo start")
+  tier = if(tier < 2, 10, tier - 1)
+  produce("ore", tier, count("ore", tier) - {oresToKeep}, "crusher")
+  executesync("turbo stop")
+  gotoif(loop, isopen("factory"))
