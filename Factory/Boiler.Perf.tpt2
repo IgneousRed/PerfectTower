@@ -1,5 +1,5 @@
 ; GENERAL INFO
-  ; Downtiers dust to try to keep a set ratio.
+  ; Uses the Boiler to try to keep a set dust ratio.
 
 ; IMPORTS
   ; Set "ratioTarget", "ratioFinalDigits" and "hasChemicalLumps" inside.
@@ -10,6 +10,7 @@
   :name Ir.Boiler.Perf
 
 ; VARIABLES
+  :global int ir.mixerActive
   :local int tierLower
   :local int tierHigher
 
@@ -20,7 +21,7 @@
   isopen("factory")
 
 loop:
-  waitwhile(active("boiler"))
+  waitwhile(active("boiler") | ir.mixerActive != 0)
   executesync("turbo start")
   tierLower = if(tierLower < 2, 9, tierLower - 1)
   tierHigher = tierLower + 1
