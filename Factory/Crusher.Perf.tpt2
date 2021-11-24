@@ -1,14 +1,12 @@
 ; GENERAL INFO
-  ; Crushes all but oresToKeep ores constantly.
+  ; Crushes all but configurable number of ores constantly.
 
 ; NAME
   :name Ir.Crusher.Perf
 
 ; VARIABLES
   :local int tier
-
-; MACROS
-  #oresToKeep 1.
+  :local double available
 
 ; CODE
   wakeup()
@@ -19,7 +17,11 @@
 loop:
   waitwhile(active("crusher"))
   executesync("turbo start")
+inc:
   tier = if(tier < 2, 10, tier - 1)
-  produce("ore", tier, count("ore", tier) - {oresToKeep}, "crusher")
+  available = count("ore", tier) - 1.
+  gotoif(inc, available < 1. & 1 < tier)
+  produce("ore", tier, available, "crusher")
+  tier = 1
   executesync("turbo stop")
   gotoif(loop, isopen("factory"))
