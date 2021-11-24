@@ -1,5 +1,5 @@
 ; GENERAL INFO
-  ; Uptiers dust to try to keep a set ratio.
+  ; Uses the Mixer to try to keep a set dust ratio.
 
 ; IMPORTS
   ; Set "ratioTarget", "ratioFinalDigits" and "hasChemicalLumps" inside.
@@ -10,9 +10,11 @@
   :name Ir.Mixer.Perf
 
 ; VARIABLES
+  :global int ir.mixerActive
+  :local int inARow
   :local int tierLower
   :local double dustHigher
-  :local double canCraft
+  :local double toCraft
   :local double needed
 
 ; CODE
@@ -21,16 +23,19 @@
 
   isopen("factory")
 
+  ir.mixerActive = 1
 loop:
   waitwhile(active("mixer"))
   executesync("turbo start")
-  tierLower = if(canCraft < floor(needed), tierLower,\
-    tierLower % 9 + 1)
+  tierLower = if(toCraft < floor(needed), tierLower, tierLower % 9 + 1)
   dustHigher = count("dust", tierLower + 1) - 1.
-  canCraft = min((count("dust", tierLower) - 2.) / 4.,\
-    dustHigher - if(dustHigher < 2., 0., 1.))
   needed = ({targetValHigh} - {currentValHigh}) / i2d(4 ^ tierLower)
-  craft("lump", tierLower, min(canCraft, needed))
+  toCraft = min(needed, min((count("dust", tierLower) - 2.) / 4.,\
+    dustHigher - if(dustHigher < 2., 0., 1.)))
+  craft("lump", tierLower, toCraft)
   produce("lump", tierLower, {lumps} - {lumpsToSave}, "mixer")
+  inARow = if(1. <= toCraft, 0, inARow + 1)
+  ir.mixerActive = if(inARow < 9, 1, 0)
   executesync("turbo stop")
   gotoif(loop, isopen("factory"))
+  gu("ir.mixerActive")
