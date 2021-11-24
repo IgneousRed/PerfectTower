@@ -11,12 +11,9 @@
 
 ; VARIABLES
   :local int tierLower
-  :local int tierHigher
+  :local double dustHigher
   :local double canCraft
   :local double needed
-
-; MACROS
-  #dustHigher (count("dust", tierHigher) - 1.)
 
 ; CODE
   wakeup()
@@ -29,9 +26,9 @@ loop:
   executesync("turbo start")
   tierLower = if(canCraft < floor(needed), tierLower,\
     tierLower % 9 + 1)
-  tierHigher = tierLower + 1
+  dustHigher = count("dust", tierLower + 1) - 1.
   canCraft = min((count("dust", tierLower) - 2.) / 4.,\
-    {dustHigher} - if({dustHigher} < 2., 0., 1.))
+    dustHigher - if(dustHigher < 2., 0., 1.))
   needed = ({targetValHigh} - {currentValHigh}) / i2d(4 ^ tierLower)
   craft("lump", tierLower, min(canCraft, needed))
   produce("lump", tierLower, {lumps} - {lumpsToSave}, "mixer")
