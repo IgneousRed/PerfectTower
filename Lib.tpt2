@@ -9,9 +9,11 @@
 ; ________________________________________BASIC________________________________________
 #lb {
 #rb }
-#portLua(name, args) {lua(return port('{name}', {args}))}
 #portArr(name) #{name}(index) {lb}lua(return {name}[{lb}index{rb}]){rb}
 {lua(\
+  function wrap(str)\
+    return '('..str..')'\
+  end\
   function port(name, args)\
     local function punct(fun, i)\
       return (i < 2 and '' or fun(i - 1)..', ')\
@@ -23,10 +25,10 @@
       return punct(pass, i)..'{lb}arg'..i..'{rb}'\
     end\
     local function call(str)\
-      return (args < 1 or str == '') and '' or '('..str..')'\
+      return (args < 1 or str == '') and '' or wrap(str)\
     end\
-    return '#'..name..'Lua'..call(input(args))..\
-    ' {lb}lua(return '..name..call(pass(args))..'){rb}'\
+    return '#'..name..call(input(args))..\
+      ' {lb}lua(return '..name..call(pass(args))..'){rb}'\
   end\
   function c2I(c)\
     return 'index("0123456789", '..c..', 0)'\
@@ -39,62 +41,71 @@
     return (0 < c_len and '('..s2I(str, c_len)..') * 10 + ' or '')..index2I(str, c_len)\
   end\
 )}
+#portLua(name, args) {lua(return port('{name}', {args}))}
 {portLua(c2I, 1)}
 {portLua(index2I, 2)}
 {portLua(s2I, 2)}
 
 ; TESTING
-;s = {s2ILua('"123"', 3)}
-
-; ________________________________________MINE________________________________________
-; Compile-time code switch for small bits of code that are different
-; between infinite and finite versions
-#ifLoops(true_part, false_part) {lua(\
-  return loops ~= 0 and '{true_part}' or '{false_part}'\
-)}
-#mineSetUpLua(loop) {lua(\
-  loops = loop\
-)}
+;s = {s2I('"123"', 3)}
 
 ; ________________________________________DUST________________________________________
-{lua(\
-  local dustVal = {}\
-  function wrap(str)\
-    return '('..str..')'\
-  end\
-  function dustLower(t)\
-    return wrap('count("dust", '..t..') - 2.')\
-  end\
-  function currentValC(c_t)\
-    return c_t < 2 and dustLower(1) or wrap('('..dustLower(c_t)..\
-      ' + count("lump", '..(c_t - 1)..') * 2.) * '..dustVal[c_t])\
-  end\
-  local function currentValLowC(c_t)\
-    return currentValC(c_t)..(c_t < 2 and '' or ' + '..currentValLowC(c_t - 1))\
-  end\
-  function dustSetUp(ratioCount, ratioDigits, chemLumps, boiler)\
+; SETTINGS
+  #ratioTarget {lb}476,476,298,238,38,30,5,5,1,1{rb}
+  #ratioFinalDigits 5
+  #lumpsToSave 1.
+  #hasChemicalLumps 1
+
+; LUA
+  {lua(\
+    local dustVal = {}\
     local ratioVal = {}\
     local ratioSum = 0\
     for i = 1, 10 do\
-      dustVal[i] = (8 - 4 * chemLumps) ^ (i - 1)\
-      ratioVal[i] = (ratioCount)[i] * dustVal[i]\
+      dustVal[i] = (8 - 4 * {hasChemicalLumps}) ^ (i - 1)\
+      ratioVal[i] = ({ratioTarget})[i] * dustVal[i]\
       ratioSum = ratioSum + ratioVal[i]\
     end\
-    local bigNum = 10 ^ ratioDigits\
+    local bigNum = 10 ^ {ratioFinalDigits}\
     local ratioTrunc = {}\
     local ratioTruncSum = 0\
     for i = 1, 10 do\
       ratioTrunc[i] = math.floor(ratioVal[i] / ratioSum * bigNum)\
       ratioTruncSum = ratioTruncSum + ratioTrunc[i]\
     end\
-    local function ratioFinalF(i)\
-      return (ratioTrunc[i] + (bigNum - ratioTruncSum < i and 0 or 1)) / bigNum\
-    end\
-    ratioFinal = {}\
+    local currentValC = {}\
     for i = 1, 10 do\
-      ratioFinal[i] = ratioFinalF(boiler ~= 0 and 11 - i or i)\
+      local function dustUsable(i)\
+        return wrap('count("dust", '..i..') - 2.')\
+      end\
+      currentValC[i] = i < 2 and dustUsable(i) or wrap('('..dustUsable(i)..\
+        ' + (count("lump", '..(i - 1)..') - {lumpsToSave}) * 2.) * '..dustVal[i])\
     end\
-    currentValTotal = wrap(currentValLowC(10))\
-  end\
-)}
-{portLua(dustSetUp, 4)}
+    local function valHighHelper(c_i, str)\
+      return ' + if('..(c_i - 1)..' < tierLower, 0., '..str..')'\
+    end\
+    local function currentValHighF(c_i)\
+      return currentValC[c_i + 1]..(c_i < 2 and '' or\
+        valHighHelper(c_i, currentValHighF(c_i - 1)))\
+    end\
+    currentValHigh = wrap(currentValHighF(9))\
+    function dustSetUp(boiler)\
+      local function targetValHighF(c_i)\
+        return tostring((ratioTrunc[c_i + 1] + (bigNum - ratioTruncSum <\
+          (boiler == 0 and c_i + 1 or 10 - c_i) and 0 or 1)) / bigNum)..(c_i < 2 and '' or\
+            valHighHelper(c_i, targetValHighF(c_i - 1)))\
+      end\
+      local function currentValHighC(c_t)\
+        return currentValC[c_t + 1]..(8 < c_t and '' or ' + '..currentValHighC(c_t + 1))\
+      end\
+      targetValHigh = wrap(wrap(currentValHighC(0))..' * '..wrap(targetValHighF(9)))\
+    end\
+  )}
+  {portLua(dustSetUp, 1)}
+  {portLua(currentValHigh, 0)}
+  {portLua(targetValHigh, 0)}
+
+; MACROS
+  #lumps count("lump", tierLower)
+
+; TESTING
