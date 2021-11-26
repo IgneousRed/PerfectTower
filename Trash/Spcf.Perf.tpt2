@@ -1,0 +1,104 @@
+; GENERAL INFO
+  ; By pressing "T" it trashes first X tiers of every item, where each X is configurable.
+  ; With default settings script takes 1106 turbo cycles
+
+; IMPORTS
+  :import Ir.Lib
+
+; NAME
+  :name Ir.Trash.Spcf.Perf
+
+; VARIABLES
+  :local string data
+  :local int index
+  :local int tier
+  :local int indexStart
+  :local int indexEnd
+  :local string item
+
+; MACROS
+  ; Only modify this macro!
+  ; By changing the number, you control how many tiers of that item to trash.
+  ; If you do not need 10, ensure you type 0X.
+  ; I Do Not Recomend removing any pair, instead just set the number to 00.
+  ; Default configuration as in the Simple version it ignores 130 items, leaving you with
+  ; in the worst case 2 slots if you have bonus 24 factory inventory.
+  #data "\
+05 block.dense \
+05 plate.dense \
+09 screw \
+00 plate.rubber \
+09 plate.circuit \
+09 ring \
+09 pipe \
+09 wire \
+09 circuit \
+02 hammer \
+05 motor \
+00 chip \
+05 cable.insulated \
+05 block \
+05 pump \
+05 plate.stack \
+00 lump \
+03 producer.town \
+03 producer.mine \
+03 producer.powerplant \
+03 producer.factory \
+03 producer.workshop \
+03 producer.constructionFirm \
+03 producer.headquarters \
+03 producer.laboratory \
+03 producer.tradingpost \
+03 producer.arcade \
+03 producer.museum \
+03 producer.shipyard \
+03 producer.statueofcubos \
+00 producer.gems \
+00 producer.exoticgems \
+09 machine.oven \
+09 machine.presser \
+09 machine.transportbelt \
+09 machine.crusher \
+09 machine.mixer \
+09 machine.refinery \
+09 machine.assembler \
+09 machine.shaper \
+09 machine.cutter \
+09 machine.boiler \
+00 sapling.rubber \
+00 rubber \
+00 ore \
+00 dust \
+00 ingot \
+09 rod \
+09 plate \
+09 cable"
+
+; CODE
+  key.t()
+
+  isopen("factory")
+
+  executesync("turbo start")
+  data = {data}
+  goto(check)
+
+trash:
+  trash(item, tier, count(item, tier))
+  tier = tier - 1
+  gotoif(trash, 0 < tier)
+
+inc:
+  index = indexEnd + 1
+
+check:
+  tier = if(sub(data, index, 1) != "0", 10, {index2I('data', 'index + 1')})
+  indexStart = index + 3
+  indexEnd = index(data, " ", indexStart)
+  indexEnd = if(indexEnd == -1, {len({data})}, indexEnd)
+  item = sub(data, indexStart, indexEnd - indexStart)
+  gotoif(if(tier < 1, inc, trash), index < {len({data})})
+
+  executesync("turbo stop")
+  wait(0.)
