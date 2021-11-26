@@ -1,0 +1,37 @@
+; GENERAL INFO
+  ; It would be better if both the turbo and the global uninit are inside the main script,
+  ; but this way there is more space for defining what to delete, but could be edited back
+
+; NAME
+  :name Ir.Trash.Smpl.Engn.Perf
+
+; VARIABLES
+  :global string ir.items
+  :global int ir.tiers
+  :local int index
+  :local int tier
+  :local int indexEnd
+  :local string item
+
+; CODE
+  executesync("turbo start")
+  goto(check)
+
+trash:
+  trash(item, tier, count(item, tier))
+  tier = tier - 1
+  gotoif(trash, 0 < tier)
+
+inc:
+  index = indexEnd + 1
+
+check:
+  tier = ir.tiers
+  indexEnd = index(ir.items, " ", index)
+  indexEnd = if(indexEnd == -1, len(ir.items), indexEnd)
+  item = sub(ir.items, index, indexEnd - index)
+  gotoif(if(tier < 1, inc, trash), index < len(ir.items))
+
+  gu("ir.items")
+  executesync("turbo stop")
+  gu("ir.tiers")
